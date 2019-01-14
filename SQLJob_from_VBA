@@ -1,0 +1,50 @@
+Private Sub ConsumptionProcess_Click()
+    Dim cnn As New ADODB.Connection
+    Dim cnn1 As New ADODB.Connection
+    Dim rst As New ADODB.Recordset
+    Dim rst1 As New ADODB.Recordset
+    Dim ConnectionString As String
+    Dim ConnectionString1 As String
+    Dim StrQuery As String
+    Dim StrQuery1 As String
+    Dim i, j, lrow As Integer
+    Dim Contract As String
+    Dim p_error_id As Integer
+    Dim eFlag As Integer
+    Contract = ""
+    j = 0
+    p_created_date_time = Now()
+    pmodified_date_time = Now()
+    
+    'Setup the connection string for accessing MS SQL database
+    
+    lrow = Cells(Rows.Count, 1).End(xlUp).Row
+    MsgBox lrow - 1
+    
+    For i = 2 To lrow
+        Contract = Contract & "<id>" & Cells(i, 1).Value & "</id>"
+    Next i
+        
+    Parameter1 = "<contract>" & Contract & "</contract>"
+        
+    ConnectionString = "Provider=SQLOLEDB.1;Password=*****;Persist Security Info=True;User ID=UserName;Data Source=ServerName\InstanceName;Use Procedure for Prepare=1;Auto Translate=True;Packet Size=4096;Workstation ID=HOSTNAME;Use Encryption for Data=False;Tag with column collation when possible=False;Initial Catalog=DB_NAME"
+    'Opens connection to the database
+    cnn.Open ConnectionString
+    'Timeout error in seconds for executing the entire query; this will run for 15 minutes before VBA timesout, but your database might timeout before this value
+    cnn.CommandTimeout = 900
+        
+    'This is your actual MS SQL query that you need to run; you should check this query first using a more robust SQL editor (such as HeidiSQL) to ensure your query is Valid
+    StrQuery = "EXEC [Stored_Procedure] " & Parmeter1 & ",'" & Parameter2 & "'& Parameter.. & " '  'Store Procedure Call from VBA
+    rst.Open StrQuery, cnn
+        
+        
+    ConnectionString1 = "Provider=SQLOLEDB.1;Password=*****;Persist Security Info=True;User ID=UserName;Data Source=ServerName\InstanceName;Use Procedure for Prepare=1;Auto Translate=True;Packet Size=4096;Workstation ID=HOSTNAME;Use Encryption for Data=False;Tag with column collation when possible=False;Initial Catalog=DB_NAME"
+    'Opens connection to the database
+    cnn1.Open ConnectionString1
+    'Timeout error in seconds for executing the entire query; this will run for 15 minutes before VBA timesout, but your database might timeout before this value
+    cnn1.CommandTimeout = 900
+    StrQuery1 = "use msdb Exec msdb.dbo.sp_start_job 'Jab_Name'"
+    MsgBox StrQuery1
+    rst.Open StrQuery1, cnn1
+        
+End Sub
